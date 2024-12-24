@@ -8,11 +8,11 @@ import pickle
 import threading
 import time
 
-
+#returning a directory selected by the user
 def set_directory():
     return filedialog.askdirectory() + '/'
 
-
+#set the currently selected playlist
 def set_playlist(master, data):
     master.selectedPlayListName = data.get("name")
     master.selectedPlayListURL = data.get("url")
@@ -21,35 +21,20 @@ def set_playlist(master, data):
 
     master.SelectedPlaylistLabel.configure(text=data.get("name"))
 
-
-def showLoading():
-    loading = tk.Toplevel()
-    loading.grab_set()
-    loading.mainloop()
-    while threading.active_count() > 1:
-        time.sleep(0.5)
-    loading.destroy()
-
-
+#UI of the main window
 class Root:
     def __init__(self, top):
 
         top.geometry("600x450")
         top.minsize(600, 475)
         top.maxsize(600, 475)
-        # top.resizable(1, 1)
         top.title("MP4/MP3 Downloader")
         top.configure(background="#000000")
         top.configure(cursor="arrow")
         top.configure(highlightbackground="#d9d9d9")
         top.configure(highlightcolor="#000000")
-        # top.resizable(False, False)
 
         self.top = top
-        self.top.update_idletasks()
-
-        self.menubar = tk.Menu(top, font="TkMenuFont", bg="#000000", fg="#00ff00")
-        top.configure(menu=self.menubar)
 
         self.Title = tk.Label(self.top)
         self.Title.place(relx=0.0, rely=0.0, height=90, width=600)
@@ -66,6 +51,8 @@ class Root:
         self.Title.configure(padx="10")
         self.Title.configure(pady="10")
         self.Title.configure(text='''DOWNLOADER''')
+
+        #----------------------------Basic Downloader-----------------------------#
 
         self.BasicDownloader = tk.Frame(self.top)
         self.BasicDownloader.place(relx=0.0, rely=0.2, relheight=0.8
@@ -173,6 +160,9 @@ class Root:
         self.PlaylistPageButton.configure(text='''Manage Playlist''')
         self.PlaylistPageButton.configure(command=self.showPlaylistDownload)
 
+        #------------------------------Playlist Manager----------------------------------#
+
+        #Valiables relating to the currently selected playlist
         self.selectedPlayListName = ""
         self.selectedPlayListURL = ""
         self.selectedPlayListType = 0
@@ -320,11 +310,13 @@ class Root:
                                     highlightthickness="2")
         self.loading = ttk.Progressbar(self.top, style="matrix.Horizontal.TProgressbar", orient="horizontal",
                                        length=200, mode='indeterminate')
-
+    
     def updateThreadCount(self):
         self.processing.set(threading.active_count())
         self.top.after(1000, self.updateThreadCount)
 
+    
+    #places or removes the loading bar depending on the number of threads
     def createLoading(self):
         if self.processing.get() == 2:
 
@@ -335,18 +327,22 @@ class Root:
             self.loading.grab_release()
             self.loading.pack_forget()
 
+    #switches to the Playlist Manger window
     def showPlaylistDownload(self):
         self.PlaylistDownload.lift(self.BasicDownloader)
         self.top.update_idletasks()
 
+    #switches back to the Basic Downloader
     def hidePlaylistDownload(self):
         self.PlaylistDownload.lower(self.BasicDownloader)
+
 
     def showPlaylistForm(self):
         self.form = tk.Toplevel()
         self.form.grab_set()
         CreatePlaylistForm(self.form, self)
 
+    #function responsable for downloadin the video when pressing the VIDEO button on the basic downloader
     def downloadVideo(self):
         if self.urlEntry.get() != "":
             directory = set_directory()
@@ -358,6 +354,7 @@ class Root:
         else:
             msgbox.showinfo("Error", "Empty url field")
 
+    #function responsable for downloadin the audio when pressing the AUDIO button on the basic downloader
     def downloadAudio(self):
         if self.urlEntry.get() != "":
             directory = set_directory()
@@ -369,6 +366,7 @@ class Root:
         else:
             msgbox.showinfo("Error", "Empty url field")
 
+    #selecing the playlist for updating
     def selectPlaylist(self):
         directory = set_directory()
         if ".config.playlist" not in os.listdir(directory):
@@ -379,6 +377,7 @@ class Root:
                 data = pickle.load(f)
                 set_playlist(self, data)
 
+    #updating the playlist
     def updatePlaylist(self):
         self.loading.lift(self.PlaylistDownload)
         threading.Thread(target=self.updateThread).start()
@@ -410,7 +409,7 @@ class Root:
                 os.remove(self.selectedPlayListDirectory + current)
         print(currentPlaylist)
 
-
+#UI for the playlist creation form
 class CreatePlaylistForm:
     def __init__(self, top, master):
 
@@ -501,7 +500,7 @@ class CreatePlaylistForm:
         self.typeLabel.configure(highlightcolor="#000000")
         self.typeLabel.configure(text='''Type''')
 
-        self.type = tk.IntVar(top, 0)
+        self.type = tk.IntVar(top, 0)#0=>video, 1=>audio
 
         self.VideoRadioButton = tk.Radiobutton(top)
         self.VideoRadioButton.place(relx=0.3, rely=0.451, height=45, width=100)
@@ -619,14 +618,13 @@ class CreatePlaylistForm:
             self.top.destroy()
 
 
-def start_up():
+def main():# main function
     base = tk.Tk()
     base.configure(height=450, width=600)
     base.maxsize(600, 450)
-    # base.resizable(False, False)
     root = Root(base)
     base.mainloop()
 
 
 if __name__ == '__main__':
-    start_up()
+    main()
