@@ -407,7 +407,6 @@ class Root:
                         found = True
             if not found:
                 os.remove(self.selectedPlayListDirectory + current)
-        print(currentPlaylist)
 
 #UI for the playlist creation form
 class CreatePlaylistForm:
