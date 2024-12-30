@@ -3,7 +3,7 @@
   This software was created to facilitate the synchronization between local and online playlists. Using it, it’s possible to manage a playlist completely online and then downloaded locally or updated if some of the elements     are already downloaded. The program works with multiple websites thanks to the <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a> and <a href="https://www.ffmpeg.org/">ffmpeg</a> libraries.
 
 ## Installation
-  For those that don’t want to deal with the hassle of downloading dependencies, there’s an <a href="https://github.com/Vega32/PlaylistSynchonizer/releases/tag/1.0">exe</a> version available. For the rest, you’ll need to download <a href="https://www.ffmpeg.org/">ffmpeg</a> and the dependencies using the following command:
+  There are two ways to run this application. For both of them you’ll need to install <a href="https://www.ffmpeg.org/">ffmpeg version 7.1</a>. Then you can either download and run the <a href="https://github.com/Vega32/PlaylistSynchonizer/releases/tag/1.0">executable</a>  or run the python code directly. To do that you’ll need to download the dependencies using the following command:
   ```
   pip install -r requirements.txt
   ```
