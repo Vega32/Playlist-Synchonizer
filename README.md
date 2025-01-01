@@ -1,4 +1,4 @@
-# PlaylistSynchonizer
+# PlaylistSynchronizer
 ## Description
   This software was created to facilitate the synchronization between local and online playlists. Using it, it’s possible to manage a playlist completely online and then downloaded locally or updated if some of the elements     are already downloaded. The program works with multiple websites thanks to the <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a> and <a href="https://www.ffmpeg.org/">ffmpeg</a> libraries.
 
